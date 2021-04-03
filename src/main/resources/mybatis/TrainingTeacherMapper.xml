@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.afterend.mapper.TrainingTeacherMapper" >
+  <resultMap id="BaseResultMap" type="com.project.afterend.beans.TrainingTeacher" >
+    <id column="tteach_id" property="tteachId" jdbcType="INTEGER" />
+    <result column="tteach_number" property="tteachNumber" jdbcType="VARCHAR" />
+    <result column="tteach_password" property="tteachPassword" jdbcType="VARCHAR" />
+    <result column="tteach_head" property="tteachHead" jdbcType="VARCHAR" />
+    <result column="tteach_name" property="tteachName" jdbcType="VARCHAR" />
+    <result column="tteach_sex" property="tteachSex" jdbcType="VARCHAR" />
+    <result column="train_id" property="trainId" jdbcType="INTEGER" />
+    <result column="dclass_id" property="dclassId" jdbcType="INTEGER" />
+    <result column="delflag" property="delflag" jdbcType="INTEGER" />
+    <result column="co_id" property="coid" jdbcType="INTEGER" />
+    <result column="ro_id" property="roleid" jdbcType="INTEGER" />
+    <result column="di_id" property="diid" jdbcType="INTEGER" />
+    <result column="train_name" property="traincompanyname" jdbcType="VARCHAR" />
+    <result column="co_name" property="collagename" jdbcType="VARCHAR" />
+    <result column="dclass_name" property="dclassname" jdbcType="VARCHAR" />
+    <result column="di_name" property="directname" jdbcType="VARCHAR" />
+    <result column="rolename" property="rolename" jdbcType="VARCHAR" />
+
+
+  </resultMap>
+  <sql id="Base_Column_List" >
+    tteach_id, tteach_number, tteach_password, tteach_head, tteach_name, tteach_sex, 
+    train_id, dclass_id, delflag
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from trainingteacher
+    where tteach_id = #{tteachId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.project.afterend.beans.TrainingTeacher" >
+    insert into trainingteacher
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tteachId != null" >
+        tteach_id,
+      </if>
+      <if test="tteachNumber != null" >
+        tteach_number,
+      </if>
+      <if test="tteachPassword != null" >
+        tteach_password,
+      </if>
+      <if test="tteachHead != null" >
+        tteach_head,
+      </if>
+      <if test="tteachName != null" >
+        tteach_name,
+      </if>
+      <if test="tteachSex != null" >
+        tteach_sex,
+      </if>
+      <if test="trainId != null" >
+        train_id,
+      </if>
+      <if test="dclassId != null" >
+        dclass_id,
+      </if>
+      <if test="delflag != null" >
+        delflag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tteachId != null" >
+        #{tteachId,jdbcType=INTEGER},
+      </if>
+      <if test="tteachNumber != null" >
+        #{tteachNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="tteachPassword != null" >
+        #{tteachPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="tteachHead != null" >
+        #{tteachHead,jdbcType=VARCHAR},
+      </if>
+      <if test="tteachName != null" >
+        #{tteachName,jdbcType=VARCHAR},
+      </if>
+      <if test="tteachSex != null" >
+        #{tteachSex,jdbcType=VARCHAR},
+      </if>
+      <if test="trainId != null" >
+        #{trainId,jdbcType=INTEGER},
+      </if>
+      <if test="dclassId != null" >
+        #{dclassId,jdbcType=INTEGER},
+      </if>
+      <if test="delflag != null" >
+        #{delflag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.afterend.beans.TrainingTeacher" >
+    update trainingteacher
+    <set >
+      <if test="tteachNumber != null" >
+        tteach_number = #{tteachNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="tteachPassword != null" >
+        tteach_password = #{tteachPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="tteachHead != null" >
+        tteach_head = #{tteachHead,jdbcType=VARCHAR},
+      </if>
+      <if test="tteachName != null" >
+        tteach_name = #{tteachName,jdbcType=VARCHAR},
+      </if>
+      <if test="tteachSex != null" >
+        tteach_sex = #{tteachSex,jdbcType=VARCHAR},
+      </if>
+      <if test="trainId != null" >
+        train_id = #{trainId,jdbcType=INTEGER},
+      </if>
+      <if test="dclassId != null" >
+        dclass_id = #{dclassId,jdbcType=INTEGER},
+      </if>
+      <if test="delflag != null" >
+        delflag = #{delflag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where tteach_id = #{tteachId,jdbcType=INTEGER}
+  </update>
+
+  <!--实训教师登录功能的实现-->
+  <select id="getLogin" parameterType="map" resultMap="BaseResultMap">
+    select * from trainingteacher where tteach_number=#{username} and tteach_password=#{password}
+  </select>
+
+  <!--得到实训教师的初始列表带模糊查询-->
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="string">
+    <bind name="pattern_steach_name" value="'%' + query + '%'" />
+    SELECT trainingteacher.*,trainingcompany.train_name,collegeinfo.co_name,directionclass.dclass_name,
+    directioninfo.di_name,collegeinfo.co_id,directioninfo.di_id,roleinfo.rolename
+    FROM trainingteacher,trainingcompany,roleinfo,directionclass,directioninfo,collegeinfo
+    WHERE trainingteacher.ro_id=roleinfo.id and trainingteacher.train_id=trainingcompany.train_id
+    and trainingteacher.dclass_id=directionclass.dclass_id and directionclass.di_id=directioninfo.di_id
+    and collegeinfo.co_id=directioninfo.co_id
+    <if test="query != null and query !=''">
+      and tteach_name LIKE #{pattern_steach_name}
+    </if>
+  </select>
+
+  <!--更新实训教师删除状态-->
+  <update id="updatebydeflag" parameterType="TrainingTeacher">
+    update TrainingTeacher set delflag=#{delflag} where tteach_id=#{tteachId}
+  </update>
+
+  <!--根据id查-->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT trainingteacher.*,trainingcompany.train_name,collegeinfo.co_name,directionclass.dclass_name,
+    directioninfo.di_name,collegeinfo.co_id,directioninfo.di_id,roleinfo.rolename
+    FROM trainingteacher,trainingcompany,roleinfo,directionclass,directioninfo,collegeinfo
+    WHERE trainingteacher.ro_id=roleinfo.id and trainingteacher.train_id=trainingcompany.train_id
+    and trainingteacher.dclass_id=directionclass.dclass_id and directionclass.di_id=directioninfo.di_id
+    and collegeinfo.co_id=directioninfo.co_id
+    and tteach_id = #{tteachId,jdbcType=INTEGER}
+  </select>
+
+  <!--增加功能-->
+  <insert id="insert" parameterType="com.project.afterend.beans.TrainingTeacher" >
+    insert into trainingteacher ( tteach_number, tteach_password,
+     tteach_name, tteach_sex,
+      train_id, dclass_id, delflag,ro_id
+      )
+    values  ( #{tteachNumber}, #{tteachPassword},
+       #{tteachName}, #{tteachSex},
+      #{trainId}, #{dclassId}, 0,#{roleid}
+      )
+  </insert>
+
+  <!--根据用户名查，重复校验问题-->
+  <select id="selectByUserName" resultMap="BaseResultMap" parameterType="string" >
+    SELECT trainingteacher.*,trainingcompany.train_name,collegeinfo.co_name,directionclass.dclass_name,
+    directioninfo.di_name,collegeinfo.co_id,directioninfo.di_id,roleinfo.rolename
+    FROM trainingteacher,trainingcompany,roleinfo,directionclass,directioninfo,collegeinfo
+    WHERE trainingteacher.ro_id=roleinfo.id and trainingteacher.train_id=trainingcompany.train_id
+    and trainingteacher.dclass_id=directionclass.dclass_id and directionclass.di_id=directioninfo.di_id
+    and collegeinfo.co_id=directioninfo.co_id
+    and tteach_number = #{tteachNumber,jdbcType=VARCHAR}
+  </select>
+
+  <!--根据班级查教师，在公司和方向已经确定的情况下-->
+  <select id="selectBydclssid" resultMap="BaseResultMap" parameterType="int" >
+    SELECT trainingteacher.*,trainingcompany.train_name,collegeinfo.co_name,directionclass.dclass_name,
+    directioninfo.di_name,collegeinfo.co_id,directioninfo.di_id,roleinfo.rolename
+    FROM trainingteacher,trainingcompany,roleinfo,directionclass,directioninfo,collegeinfo
+    WHERE trainingteacher.ro_id=roleinfo.id and trainingteacher.train_id=trainingcompany.train_id
+    and trainingteacher.dclass_id=directionclass.dclass_id and directionclass.di_id=directioninfo.di_id
+    and collegeinfo.co_id=directioninfo.co_id
+    and trainingteacher.dclass_id = #{dclssid,jdbcType=INTEGER}
+  </select>
+
+  <!--修改信息-->
+  <update id="updateByPrimaryKey" parameterType="com.project.afterend.beans.TrainingTeacher" >
+    update trainingteacher
+    set tteach_number = #{tteachNumber,jdbcType=VARCHAR},
+      tteach_password = #{tteachPassword,jdbcType=VARCHAR},
+      tteach_head = #{tteachHead,jdbcType=VARCHAR},
+      tteach_name = #{tteachName,jdbcType=VARCHAR},
+      tteach_sex = #{tteachSex,jdbcType=VARCHAR},
+      train_id = #{trainId,jdbcType=INTEGER},
+      dclass_id = #{dclassId,jdbcType=INTEGER},
+      ro_id=#{roleid,jdbcType=INTEGER}
+    where tteach_id = #{tteachId,jdbcType=INTEGER}
+  </update>
+
+  <!--更新教师角色-->
+  <update id="updaterole" parameterType="com.project.afterend.beans.TrainingTeacher" >
+    update trainingteacher
+    set ro_id=#{roleid,jdbcType=INTEGER}
+    where tteach_id = #{tteachId,jdbcType=INTEGER}
+  </update>
+
+  <!--得到人数为了画图-->
+  <select id="getnum" resultType="int">
+    SELECT COUNT(*) FROM trainingteacher
+  </select>
+</mapper>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.afterend.mapper.SchoolTeacherMapper" >
+  <resultMap id="BaseResultMap" type="SchoolTeacher" >
+    <id column="steach_id" property="steachId" jdbcType="INTEGER" />
+    <result column="steach_number" property="steachNumber" jdbcType="VARCHAR" />
+    <result column="steach_password" property="steachPassword" jdbcType="VARCHAR" />
+    <result column="steach_name" property="steachName" jdbcType="VARCHAR" />
+    <result column="steach_sex" property="steachSex" jdbcType="VARCHAR" />
+    <result column="steach_email" property="steachEmail" jdbcType="VARCHAR" />
+    <result column="steach_tel" property="steachTel" jdbcType="VARCHAR" />
+    <result column="co_id" property="coId" jdbcType="INTEGER" />
+    <result column="co_name" property="coname" jdbcType="VARCHAR" />
+    <result column="steach_head" property="steachHead" jdbcType="VARCHAR" />
+    <result column="delflag" property="delflag" jdbcType="INTEGER" />
+    <result column="role_id" property="roleid" jdbcType="INTEGER" />
+    <result column="rolename" property="rolename" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    steach_id, steach_number, steach_password, steach_name, steach_sex, steach_email,
+    steach_tel, co_id, steach_head, delflag
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from schoolteacher
+    where steach_id = #{steachId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" parameterType="SchoolTeacher" >
+    insert into schoolteacher
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="steachId != null" >
+        steach_id,
+      </if>
+      <if test="steachNumber != null" >
+        steach_number,
+      </if>
+      <if test="steachPassword != null" >
+        steach_password,
+      </if>
+      <if test="steachName != null" >
+        steach_name,
+      </if>
+      <if test="steachSex != null" >
+        steach_sex,
+      </if>
+      <if test="steachEmail != null" >
+        steach_email,
+      </if>
+      <if test="steachTel != null" >
+        steach_tel,
+      </if>
+      <if test="coId != null" >
+        co_id,
+      </if>
+      <if test="steachHead != null" >
+        steach_head,
+      </if>
+      <if test="delflag != null" >
+        delflag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="steachId != null" >
+        #{steachId,jdbcType=INTEGER},
+      </if>
+      <if test="steachNumber != null" >
+        #{steachNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="steachPassword != null" >
+        #{steachPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="steachName != null" >
+        #{steachName,jdbcType=VARCHAR},
+      </if>
+      <if test="steachSex != null" >
+        #{steachSex,jdbcType=VARCHAR},
+      </if>
+      <if test="steachEmail != null" >
+        #{steachEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="steachTel != null" >
+        #{steachTel,jdbcType=VARCHAR},
+      </if>
+      <if test="coId != null" >
+        #{coId,jdbcType=INTEGER},
+      </if>
+      <if test="steachHead != null" >
+        #{steachHead,jdbcType=VARCHAR},
+      </if>
+      <if test="delflag != null" >
+        #{delflag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="SchoolTeacher" >
+    update schoolteacher
+    set steach_number = #{steachNumber,jdbcType=VARCHAR},
+      steach_password = #{steachPassword,jdbcType=VARCHAR},
+      steach_name = #{steachName,jdbcType=VARCHAR},
+      steach_sex = #{steachSex,jdbcType=VARCHAR},
+      steach_email = #{steachEmail,jdbcType=VARCHAR},
+      steach_tel = #{steachTel,jdbcType=VARCHAR},
+      co_id = #{coId,jdbcType=INTEGER},
+      steach_head = #{steachHead,jdbcType=VARCHAR},
+      delflag = #{delflag,jdbcType=INTEGER}
+    where steach_id = #{steachId,jdbcType=INTEGER}
+  </update>
+
+  <!--得到教师的初始列表带模糊查询-->
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="string">
+    <bind name="pattern_steach_name" value="'%' + query + '%'" />
+    SELECT *
+    FROM schoolteacher,collegeinfo,roleinfo
+    WHERE schoolteacher.co_id=collegeinfo.co_id and role_id=id
+    <if test="query != null and query !=''">
+      and steach_name LIKE #{pattern_steach_name}
+    </if>
+  </select>
+  <!--更新教师删除状态-->
+  <update id="updatebydeflag" parameterType="SchoolTeacher">
+    update schoolteacher set delflag=#{delflag} where steach_id=#{steachId}
+  </update>
+
+  <!--增加教师-->
+  <insert id="insert" parameterType="SchoolTeacher" >
+    insert into schoolteacher ( steach_number, steach_password,
+      steach_name, steach_sex, steach_email,
+      steach_tel, co_id, steach_head,
+      delflag,role_id)
+    values (#{steachNumber,jdbcType=VARCHAR}, #{steachPassword,jdbcType=VARCHAR},
+      #{steachName,jdbcType=VARCHAR}, #{steachSex,jdbcType=VARCHAR}, #{steachEmail,jdbcType=VARCHAR},
+      #{steachTel,jdbcType=VARCHAR}, #{coId,jdbcType=INTEGER}, #{steachHead,jdbcType=VARCHAR},
+      0,#{roleid,jdbcType=INTEGER})
+  </insert>
+
+  <!--根据id查询教师-->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select *
+    from schoolteacher,collegeinfo,roleinfo
+    where steach_id = #{steachId,jdbcType=INTEGER} and schoolteacher.co_id=collegeinfo.co_id and role_id=id
+  </select>
+
+  <!--修改页面里面修改教师信息-->
+  <update id="updateByPrimaryKeySelective" parameterType="SchoolTeacher" >
+    update schoolteacher
+    <set >
+      <if test="steachNumber != null" >
+        steach_number = #{steachNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="steachPassword != null" >
+        steach_password = #{steachPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="steachName != null" >
+        steach_name = #{steachName,jdbcType=VARCHAR},
+      </if>
+      <if test="steachSex != null" >
+        steach_sex = #{steachSex,jdbcType=VARCHAR},
+      </if>
+      <if test="steachEmail != null" >
+        steach_email = #{steachEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="steachTel != null" >
+        steach_tel = #{steachTel,jdbcType=VARCHAR},
+      </if>
+      <if test="coId != null" >
+        co_id = #{coId,jdbcType=INTEGER},
+      </if>
+      <if test="steachHead != null" >
+        steach_head = #{steachHead,jdbcType=VARCHAR},
+      </if>
+      <if test="delflag != null" >
+        delflag = #{delflag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where steach_id = #{steachId,jdbcType=INTEGER}
+  </update>
+  <!--给教师分配新的角色-->
+  <update id="upfatestrole" parameterType="schoolTeacher">
+    update schoolteacher set role_id=#{roleid} where steach_id = #{steachId,jdbcType=INTEGER}
+  </update>
+  <!--学院教师的登录功能的实现-->
+  <select id="getLogin" parameterType="map" resultMap="BaseResultMap">
+    select * from schoolteacher where steach_number=#{username} and steach_password=#{password}
+  </select>
+
+  <!--根据学院查询查询教师-->
+  <select id="selectByCollegeId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select *
+    from schoolteacher,collegeinfo,roleinfo
+    where schoolteacher.co_id = #{coId,jdbcType=INTEGER} and schoolteacher.co_id=collegeinfo.co_id and role_id=id
+  </select>
+
+  <!--根据职工号查询，用户名重复校验-->
+  <select id="selectBysteachNumber" resultMap="BaseResultMap" parameterType="string" >
+    select *
+    from schoolteacher,collegeinfo,roleinfo
+    where schoolteacher.co_id=collegeinfo.co_id and role_id=id
+    and steach_number = #{steachNumber,jdbcType=VARCHAR}
+  </select>
+
+  <!--得到人数为了画图-->
+  <select id="getnum" resultType="int">
+    SELECT COUNT(*) FROM schoolteacher
+  </select>
+</mapper>

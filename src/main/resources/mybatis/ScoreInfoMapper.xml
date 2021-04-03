@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.afterend.mapper.ScoreInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.project.afterend.beans.ScoreInfo" >
+    <id column="score_id" property="scoreId" jdbcType="INTEGER" />
+    <result column="stu_id" property="stuId" jdbcType="INTEGER" />
+    <result column="one" property="one" jdbcType="DOUBLE" />
+    <result column="two" property="two" jdbcType="DOUBLE" />
+    <result column="three" property="three" jdbcType="DOUBLE" />
+    <result column="four" property="four" jdbcType="DOUBLE" />
+    <result column="five" property="five" jdbcType="DOUBLE" />
+    <result column="six" property="six" jdbcType="DOUBLE" />
+    <result column="delflag" property="delflag" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    score_id, stu_id, one, two, three, four, five, six, delflag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from scoreinfo
+    where score_id = #{scoreId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from scoreinfo
+    where score_id = #{scoreId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.project.afterend.beans.ScoreInfo" >
+    insert into scoreinfo (score_id, stu_id, one, 
+      two, three, four, five, 
+      six, delflag)
+    values (#{scoreId,jdbcType=INTEGER}, #{stuId,jdbcType=INTEGER}, #{one,jdbcType=DOUBLE}, 
+      #{two,jdbcType=DOUBLE}, #{three,jdbcType=DOUBLE}, #{four,jdbcType=DOUBLE}, #{five,jdbcType=DOUBLE}, 
+      #{six,jdbcType=DOUBLE}, #{delflag,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.project.afterend.beans.ScoreInfo" >
+    insert into scoreinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="scoreId != null" >
+        score_id,
+      </if>
+      <if test="stuId != null" >
+        stu_id,
+      </if>
+      <if test="one != null" >
+        one,
+      </if>
+      <if test="two != null" >
+        two,
+      </if>
+      <if test="three != null" >
+        three,
+      </if>
+      <if test="four != null" >
+        four,
+      </if>
+      <if test="five != null" >
+        five,
+      </if>
+      <if test="six != null" >
+        six,
+      </if>
+      <if test="delflag != null" >
+        delflag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="scoreId != null" >
+        #{scoreId,jdbcType=INTEGER},
+      </if>
+      <if test="stuId != null" >
+        #{stuId,jdbcType=INTEGER},
+      </if>
+      <if test="one != null" >
+        #{one,jdbcType=DOUBLE},
+      </if>
+      <if test="two != null" >
+        #{two,jdbcType=DOUBLE},
+      </if>
+      <if test="three != null" >
+        #{three,jdbcType=DOUBLE},
+      </if>
+      <if test="four != null" >
+        #{four,jdbcType=DOUBLE},
+      </if>
+      <if test="five != null" >
+        #{five,jdbcType=DOUBLE},
+      </if>
+      <if test="six != null" >
+        #{six,jdbcType=DOUBLE},
+      </if>
+      <if test="delflag != null" >
+        #{delflag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.afterend.beans.ScoreInfo" >
+    update scoreinfo
+    <set >
+      <if test="stuId != null" >
+        stu_id = #{stuId,jdbcType=INTEGER},
+      </if>
+      <if test="one != null" >
+        one = #{one,jdbcType=DOUBLE},
+      </if>
+      <if test="two != null" >
+        two = #{two,jdbcType=DOUBLE},
+      </if>
+      <if test="three != null" >
+        three = #{three,jdbcType=DOUBLE},
+      </if>
+      <if test="four != null" >
+        four = #{four,jdbcType=DOUBLE},
+      </if>
+      <if test="five != null" >
+        five = #{five,jdbcType=DOUBLE},
+      </if>
+      <if test="six != null" >
+        six = #{six,jdbcType=DOUBLE},
+      </if>
+      <if test="delflag != null" >
+        delflag = #{delflag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where score_id = #{scoreId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.project.afterend.beans.ScoreInfo" >
+    update scoreinfo
+    set stu_id = #{stuId,jdbcType=INTEGER},
+      one = #{one,jdbcType=DOUBLE},
+      two = #{two,jdbcType=DOUBLE},
+      three = #{three,jdbcType=DOUBLE},
+      four = #{four,jdbcType=DOUBLE},
+      five = #{five,jdbcType=DOUBLE},
+      six = #{six,jdbcType=DOUBLE},
+      delflag = #{delflag,jdbcType=INTEGER}
+    where score_id = #{scoreId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.afterend.mapper.InternshipCompanyMapper" >
+  <resultMap id="BaseResultMap" type="com.project.afterend.beans.InternshipCompany" >
+    <id column="inter_id" property="interId" jdbcType="INTEGER" />
+    <result column="inter_name" property="interName" jdbcType="VARCHAR" />
+    <result column="inter_password" property="interPassword" jdbcType="VARCHAR" />
+    <result column="principal" property="principal" jdbcType="VARCHAR" />
+    <result column="inter_tel" property="interTel" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="delflag" property="delflag" jdbcType="INTEGER" />
+    <result column="role_id" property="roleid" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="starttime" property="starttime" jdbcType="DATE" />
+    <result column="endtime" property="endtime" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    inter_id, inter_name, inter_password, principal, inter_tel, address, delflag
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from internshipcompany
+    where inter_id = #{interId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.project.afterend.beans.InternshipCompany" >
+    insert into internshipcompany
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="interId != null" >
+        inter_id,
+      </if>
+      <if test="interName != null" >
+        inter_name,
+      </if>
+      <if test="interPassword != null" >
+        inter_password,
+      </if>
+      <if test="principal != null" >
+        principal,
+      </if>
+      <if test="interTel != null" >
+        inter_tel,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="delflag != null" >
+        delflag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="interId != null" >
+        #{interId,jdbcType=INTEGER},
+      </if>
+      <if test="interName != null" >
+        #{interName,jdbcType=VARCHAR},
+      </if>
+      <if test="interPassword != null" >
+        #{interPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="principal != null" >
+        #{principal,jdbcType=VARCHAR},
+      </if>
+      <if test="interTel != null" >
+        #{interTel,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="delflag != null" >
+        #{delflag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.afterend.beans.InternshipCompany" >
+    update internshipcompany
+    <set >
+      <if test="interName != null" >
+        inter_name = #{interName,jdbcType=VARCHAR},
+      </if>
+      <if test="interPassword != null" >
+        inter_password = #{interPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="principal != null" >
+        principal = #{principal,jdbcType=VARCHAR},
+      </if>
+      <if test="interTel != null" >
+        inter_tel = #{interTel,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="delflag != null" >
+        delflag = #{delflag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where inter_id = #{interId,jdbcType=INTEGER}
+  </update>
+
+  <!--实习公司登录功能的实现-->
+  <select id="getLogin" parameterType="map" resultMap="BaseResultMap">
+    select * from internshipcompany where inter_name=#{username} and inter_password=#{password}
+  </select>
+
+  <!--得到实习公司的初始列表带模糊查询-->
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="string">
+    <bind name="pattern_steach_name" value="'%' + query + '%'" />
+    SELECT *
+    FROM internshipcompany,roleinfo
+    WHERE internshipcompany.role_id=roleinfo.id
+    <if test="query != null and query !=''">
+      and inter_name LIKE #{pattern_steach_name}
+    </if>
+  </select>
+
+  <!--更新实习公司删除状态-->
+  <update id="updatebydeflag" parameterType="InternshipCompany">
+    update InternshipCompany set delflag=#{delflag} where inter_id=#{interId}
+  </update>
+
+  <!--根据id查-->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT *
+    FROM internshipcompany,roleinfo
+    WHERE internshipcompany.role_id=roleinfo.id
+    and inter_id = #{interId,jdbcType=INTEGER}
+  </select>
+
+  <!--根据用户名查，重复校验问题-->
+  <select id="selectByUserName" resultMap="BaseResultMap" parameterType="string" >
+     SELECT *
+    FROM internshipcompany,roleinfo
+    WHERE internshipcompany.role_id=roleinfo.id
+    and inter_name = #{interName,jdbcType=VARCHAR}
+  </select>
+
+  <!--实现插入功能-->
+  <insert id="insert" parameterType="com.project.afterend.beans.InternshipCompany" >
+    insert into internshipcompany ( inter_name, inter_password,
+      principal, inter_tel, address,
+      delflag,role_id)
+    values ( #{interName,jdbcType=VARCHAR}, #{interPassword,jdbcType=VARCHAR},
+      #{principal,jdbcType=VARCHAR}, #{interTel,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+      0,7)
+  </insert>
+
+  <!--得到所有实习公司的信息-->
+  <select id="selectall" resultMap="BaseResultMap" >
+     SELECT *
+    FROM internshipcompany
+  </select>
+
+  <!--修改信息-->
+  <update id="updateByPrimaryKey" parameterType="com.project.afterend.beans.InternshipCompany" >
+    update internshipcompany
+    set inter_name = #{interName,jdbcType=VARCHAR},
+      inter_password = #{interPassword,jdbcType=VARCHAR},
+      principal = #{principal,jdbcType=VARCHAR},
+      inter_tel = #{interTel,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR}
+    where inter_id = #{interId,jdbcType=INTEGER}
+  </update>
+  <!--得到人数为了画图-->
+  <select id="getnum" resultType="int">
+    SELECT COUNT(*) FROM internshipcompany
+  </select>
+
+  <!--新,可以保证新的都没有bug-->
+  <!--得到正在招聘实习公司的信息-->
+  <select id="selectInternshipcompany" resultMap="BaseResultMap" >
+     SELECT *
+    FROM internshipcompany where status='run'
+  </select>
+</mapper>

@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.afterend.mapper.InternshipInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.project.afterend.beans.InternshipInfo" >
+    <id column="in_id" property="inId" jdbcType="INTEGER" />
+    <result column="stu_id" property="stuId" jdbcType="INTEGER" />
+    <result column="inter_id" property="interId" jdbcType="INTEGER" />
+    <result column="starttime" property="starttime" jdbcType="DATE" />
+    <result column="endtime" property="endtime" jdbcType="DATE" />
+    <result column="delflag" property="delflag" jdbcType="INTEGER" />
+    <result column="co_id" property="coid" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="stu_number" property="stunumber" jdbcType="VARCHAR" />
+    <result column="stu_name" property="stuname" jdbcType="VARCHAR" />
+    <result column="stu_sex" property="stusex" jdbcType="VARCHAR" />
+    <result column="inter_name" property="intername" jdbcType="VARCHAR" />
+    <result column="co_name" property="coname" jdbcType="VARCHAR" />
+    <result column="maj_name" property="majname" jdbcType="VARCHAR" />
+    <result column="ad_name" property="adname" jdbcType="VARCHAR" />
+
+    <result column="old_post" property="old_post" jdbcType="VARCHAR" />
+    <result column="old_money" property="old_money" jdbcType="DOUBLE" />
+    <result column="new_post" property="new_post" jdbcType="VARCHAR" />
+    <result column="new_money" property="new_money" jdbcType="DOUBLE" />
+    <result column="action" property="action" jdbcType="INTEGER" />
+    <result column="new_company" property="new_company" jdbcType="INTEGER" />
+    <result column="new_starttime" property="new_starttime" jdbcType="DATE" />
+    <result column="new_endtime" property="new_endtime" jdbcType="DATE" />
+    <result column="new_address" property="new_address" jdbcType="VARCHAR" />
+    <result column="text" property="text" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="signall" property="signall" jdbcType="VARCHAR" />
+    <result column="intershipscore" property="intershipscore" jdbcType="VARCHAR" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    in_id, stu_id, inter_id, starttime, endtime, delflag
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from internshipinfo
+    where in_id = #{inId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.project.afterend.beans.InternshipInfo" >
+    insert into internshipinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="inId != null" >
+        in_id,
+      </if>
+      <if test="stuId != null" >
+        stu_id,
+      </if>
+      <if test="interId != null" >
+        inter_id,
+      </if>
+      <if test="starttime != null" >
+        starttime,
+      </if>
+      <if test="endtime != null" >
+        endtime,
+      </if>
+      <if test="delflag != null" >
+        delflag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="inId != null" >
+        #{inId,jdbcType=INTEGER},
+      </if>
+      <if test="stuId != null" >
+        #{stuId,jdbcType=INTEGER},
+      </if>
+      <if test="interId != null" >
+        #{interId,jdbcType=INTEGER},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=DATE},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=DATE},
+      </if>
+      <if test="delflag != null" >
+        #{delflag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.afterend.beans.InternshipInfo" >
+    update internshipinfo
+    <set >
+      <if test="stuId != null" >
+        stu_id = #{stuId,jdbcType=INTEGER},
+      </if>
+      <if test="interId != null" >
+        inter_id = #{interId,jdbcType=INTEGER},
+      </if>
+      <if test="starttime != null" >
+        starttime = #{starttime,jdbcType=DATE},
+      </if>
+      <if test="endtime != null" >
+        endtime = #{endtime,jdbcType=DATE},
+      </if>
+      <if test="delflag != null" >
+        delflag = #{delflag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where in_id = #{inId,jdbcType=INTEGER}
+  </update>
+
+
+  <!--得到初始列表带模糊查询-->
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="string">
+    <bind name="pattern_steach_name" value="'%' + query + '%'" />
+    SELECT internshipinfo.*,studentinfo.stu_number,studentinfo.stu_name,internshipcompany.inter_name,collegeinfo.co_id,collegeinfo.co_name
+    FROM internshipinfo,studentinfo,internshipcompany,administrativeclass,majorinfo,collegeinfo
+    WHERE internshipinfo.stu_id=studentinfo.stu_id
+    and internshipinfo.inter_id=internshipcompany.inter_id
+    and studentinfo.ad_id=administrativeclass.ad_id
+    and administrativeclass.maj_id=majorinfo.maj_id
+    and majorinfo.co_id=collegeinfo.co_id
+    <if test="query != null and query !=''">
+      and studentinfo.stu_name LIKE #{pattern_steach_name}
+    </if>
+  </select>
+
+  <!--更新删除状态-->
+  <update id="updatebydeflag" parameterType="InternshipInfo">
+    update InternshipInfo set delflag=#{delflag} where in_id=#{inId}
+  </update>
+
+  <!--根据id查询-->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT internshipinfo.*,studentinfo.stu_number,studentinfo.stu_name,internshipcompany.inter_name,collegeinfo.co_id,collegeinfo.co_name
+    FROM internshipinfo,studentinfo,internshipcompany,administrativeclass,majorinfo,collegeinfo
+    WHERE internshipinfo.stu_id=studentinfo.stu_id
+    and internshipinfo.inter_id=internshipcompany.inter_id
+    and studentinfo.ad_id=administrativeclass.ad_id
+    and administrativeclass.maj_id=majorinfo.maj_id
+    and majorinfo.co_id=collegeinfo.co_id
+    and in_id = #{inId,jdbcType=INTEGER}
+  </select>
+
+  <!--根据学号查询，防止重复添加-->
+  <select id="selectBystuid" resultMap="BaseResultMap" parameterType="int" >
+    SELECT internshipinfo.*,studentinfo.stu_number,studentinfo.stu_name,internshipcompany.inter_name,collegeinfo.co_id,collegeinfo.co_name
+    FROM internshipinfo,studentinfo,internshipcompany,administrativeclass,majorinfo,collegeinfo
+    WHERE internshipinfo.stu_id=studentinfo.stu_id
+    and internshipinfo.inter_id=internshipcompany.inter_id
+    and studentinfo.ad_id=administrativeclass.ad_id
+    and administrativeclass.maj_id=majorinfo.maj_id
+    and majorinfo.co_id=collegeinfo.co_id
+    and studentinfo.stu_id = #{stuId,jdbcType=INTEGER}
+  </select>
+
+  <!--增加功能-->
+  <insert id="insert" parameterType="com.project.afterend.beans.InternshipInfo" >
+    insert into internshipinfo ( stu_id, inter_id,
+      starttime, endtime, delflag,status
+      )
+    values ( #{stuId,jdbcType=INTEGER}, #{interId,jdbcType=INTEGER},
+      #{starttime,jdbcType=DATE}, #{endtime,jdbcType=DATE}, 0,
+      #{status,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <!--修改信息-->
+  <update id="updateByPrimaryKey" parameterType="com.project.afterend.beans.InternshipInfo" >
+    update internshipinfo
+    set stu_id = #{stuId,jdbcType=INTEGER},
+      inter_id = #{interId,jdbcType=INTEGER},
+      starttime = #{starttime,jdbcType=DATE},
+      endtime = #{endtime,jdbcType=DATE},
+      status=#{status,jdbcType=VARCHAR}
+    where in_id = #{inId,jdbcType=INTEGER}
+  </update>
+
+  <!--前台得到某个学生的实习信息-->
+  <select id="selectByStuNumberFort" parameterType="string" resultMap="BaseResultMap">
+    SELECT i.*,s.stu_number,s.stu_name,ic.inter_name
+    FROM internshipinfo i,studentinfo s,internshipcompany ic
+    WHERE i.stu_id=s.stu_id and ic.inter_id=i.inter_id and s.stu_number=#{stuNumber}
+  </select>
+
+  <!--前台学生提交修改实习信息的请求-->
+  <update id="updateStudentInternshipBystuNum" parameterType="map">
+    UPDATE internshipinfo
+    set new_company=#{new_company},new_post=#{new_post},new_money=#{new_money},action=1,
+    new_starttime=#{new_starttime},new_endtime=#{new_endtime},new_address=#{new_address},
+    text=#{text}
+    WHERE stu_id=#{stuNum}
+  </update>
+
+ <!-- 教师获取更在等待审核的学生信息-->
+  <select id="selectIntershipChangeInfo" parameterType="map" resultMap="BaseResultMap">
+    SELECT i.*,s.stu_number,s.stu_name,ic.inter_name,ic.address
+    FROM internshipinfo i,studentinfo s, internshipcompany ic
+    WHERE action=1 and i.stu_id=s.stu_id and i.inter_id=ic.inter_id  and
+    stu_name LIKE CONCAT('%',#{query},'%') and i.stu_id in
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
+  <!--根据学生id获得具体的变更申请-->
+  <select id="selectIntershipChangeInfoByStuid" parameterType="int" resultMap="BaseResultMap">
+    SELECT i.*,s.stu_number,s.stu_name,ic.inter_name,ic.address
+    FROM internshipinfo i,studentinfo s, internshipcompany ic
+    WHERE action=1 and i.stu_id=s.stu_id and i.inter_id=ic.inter_id  and
+    i.stu_id =#{id}
+  </select>
+
+  <!--老师拒绝更改-->
+  <update id="refusechange" parameterType="int">
+    UPDATE internshipinfo
+    set new_company=null,new_post=null,new_money=null,action=0,
+    new_starttime=null,new_endtime=null,new_address=null,
+    text=null
+    WHERE in_id=#{inid}
+  </update>
+
+  <!--老师同意了更改-->
+  <update id="acceptchange" parameterType="map">
+    UPDATE internshipinfo
+    SET starttime=new_starttime,endtime=new_endtime,old_post=new_post,old_money=new_money,action=0,
+    new_company=null,new_post=null,new_money=null,new_starttime=null,new_endtime=null,new_address=null,
+    text=null,inter_id=#{interid}
+    WHERE in_id=#{inid}
+  </update>
+
+  <!--根据老师的信号现对数据库进行修改-->
+  <update id="getstudentchangeinfobysignal" parameterType="map">
+    UPDATE internshipinfo
+    set signall=#{signal},action=2
+    WHERE in_id=#{inid}
+  </update>
+
+  <!--教师获取自己所带所有学生的实习信息-->
+  <select id="selectallIntership" parameterType="map" resultMap="BaseResultMap">
+    SELECT i.*,s.stu_number,s.stu_name,ic.inter_name,ic.address
+    FROM internshipinfo i,studentinfo s, internshipcompany ic
+    WHERE i.stu_id=s.stu_id and i.inter_id=ic.inter_id  and
+    stu_name LIKE CONCAT('%',#{query},'%') and i.stu_id in
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
+  <!--老师给学生打实习成绩-->
+  <update id="givescore" parameterType="map">
+    UPDATE internshipinfo
+    set intershipscore=#{intershipscore}
+    WHERE in_id=#{inid}
+  </update>
+
+  <!--<学生查看自己的实习成绩-->
+  <select id="selectoneIntershipscore" parameterType="int" resultMap="BaseResultMap">
+    SELECT *
+    FROM internshipinfo
+    WHERE stu_id=#{stuId}
+  </select>
+
+  <!--学生实习薪资统计********************-->
+  <!--根绝学院id查询学生薪资范围-->
+  <select id="selectSalaryByCollageId" parameterType="int" resultMap="BaseResultMap">
+    SELECT DISTINCT internshipinfo.*
+    FROM studentinfo,roleinfo,administrativeclass,majorinfo,collegeinfo,internshipinfo
+    WHERE studentinfo.ad_id=administrativeclass.ad_id
+    and administrativeclass.maj_id=majorinfo.maj_id
+    and majorinfo.co_id=collegeinfo.co_id
+    and studentinfo.stu_id=internshipinfo.stu_id
+    and collegeinfo.co_id=#{co_id}
+  </select>
+
+  <!--根据学院id查学生实习地点-->
+  <select id="selectLocationByCollageId" parameterType="int" resultMap="BaseResultMap">
+    SELECT count(address) count,address
+    FROM internshipinfo,internshipcompany,studentinfo,administrativeclass,majorinfo,collegeinfo
+    WHERE internshipinfo.inter_id=internshipcompany.inter_id
+    and studentinfo.ad_id=administrativeclass.ad_id
+    and administrativeclass.maj_id=majorinfo.maj_id
+    and majorinfo.co_id=collegeinfo.co_id
+    and studentinfo.stu_id=internshipinfo.stu_id
+    and collegeinfo.co_id=1
+    GROUP BY address
+  </select>
+
+  <!--根据学生年级得到排行榜-->
+  <select id="selectStudentRankListByGrade" parameterType="string" resultMap="BaseResultMap">
+    SELECT studentinfo.stu_id,studentinfo.stu_number,studentinfo.stu_name,studentinfo.stu_sex,
+    internshipcompany.inter_name,internshipinfo.old_post,internshipinfo.old_money,
+    collegeinfo.co_name,majorinfo.maj_name,administrativeclass.ad_name,internshipcompany.address,
+    internshipinfo.starttime,internshipinfo.endtime
+    FROM internshipinfo,studentinfo,internshipcompany,administrativeclass,majorinfo,collegeinfo
+    WHERE internshipinfo.stu_id=studentinfo.stu_id
+    and internshipinfo.inter_id=internshipcompany.inter_id
+    and studentinfo.ad_id=administrativeclass.ad_id
+    and administrativeclass.maj_id=majorinfo.maj_id
+    and majorinfo.co_id=collegeinfo.co_id AND studentinfo.grade=#{grade}
+  </select>
+
+
+</mapper>

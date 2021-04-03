@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.afterend.mapper.NoticeinfoMapper" >
+    <!-- 查询所有新闻 -->
+    <select id="list"  resultType="Noticeinfo">
+        select * from noticeinfo
+    </select>
+    <!--根据id查询-->
+    <select id="getByid" resultType="Noticeinfo" parameterType="int">
+        select * from noticeinfo where notice_id=#{id}
+    </select>
+
+    <!--修改新闻信息-->
+    <update id="updateNews" parameterType="Noticeinfo">
+        update noticeinfo
+        set title=#{title},body=#{body},kind=#{kind},
+        isslideshow=#{isslideshow}
+        where notice_id=#{notice_id}
+    </update>
+
+    <!--删除某个新闻-->
+    <delete id="deletenew" parameterType="int">
+        delete from noticeinfo where notice_id=#{notice_id}
+    </delete>
+
+    <!--发布一个新闻-->
+    <insert id="insertNews" parameterType="Noticeinfo">
+        <selectKey resultType="int" order="AFTER" keyProperty="notice_id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into noticeinfo (title,body,kind,publisher,publishtime,pageview,isslideshow)
+        values (#{title},#{body},#{kind},#{publisher},#{publishtime},0,#{isslideshow});
+    </insert>
+
+    <!--更新新闻轮播图片的访问路径-->
+    <update id="updateimgurl" parameterType="map">
+        update noticeinfo
+        set imgurl=#{imgurl},slideimgname=#{slideimgname}
+        where notice_id=#{notice_id}
+    </update>
+
+    <!--得到学校相关新闻类的所有新闻-->
+    <select id="selectallstudentnews" resultType="Noticeinfo">
+        select * from noticeinfo where kind='student'
+    </select>
+
+    <!--根据发布人得到学校相关新闻类的所有新闻-->
+    <select id="getallstudentNewsbypublisher" resultType="Noticeinfo" parameterType="string">
+        select * from noticeinfo where kind='student' and publisher=#{name}
+    </select>
+
+    <!--根据发布人得到实习相关新闻类的所有新闻-->
+    <select id="getallpriceNewsbypublisher" resultType="Noticeinfo" parameterType="string">
+        select * from noticeinfo where kind='price' and publisher=#{name}
+    </select>
+
+    <!--根据发布人得到实训相关新闻类的所有新闻-->
+    <select id="getallpoticeNewsbypublisher" resultType="Noticeinfo" parameterType="string">
+        select * from noticeinfo where kind='potice' and publisher=#{name}
+    </select>
+
+    <!--根据发布人得到招聘相关新闻类的所有新闻-->
+    <select id="getallinterNewsbypublisher" resultType="Noticeinfo" parameterType="string">
+        select * from noticeinfo where kind='inter' and publisher=#{name}
+    </select>
+
+    <!--得到实习相关新闻类的所有新闻-->
+    <select id="selectallpricenews" resultType="Noticeinfo">
+        select * from noticeinfo where kind='price'
+    </select>
+
+    <!--得到实训相关新闻类的所有新闻-->
+    <select id="selectallpoticenews" resultType="Noticeinfo">
+        select * from noticeinfo where kind='potice'
+    </select>
+
+    <!--得到招聘相关新闻类的所有新闻-->
+    <select id="selectallinternews" resultType="Noticeinfo">
+        select * from noticeinfo where kind='inter'
+    </select>
+
+    <!--每点击一次新，辩证假新闻的浏览量-->
+    <update id="updatePageView" parameterType="int">
+        update noticeinfo
+        set pageview=pageview+1
+        WHERE notice_id=#{id}
+    </update>
+
+    <!--得到带有轮播图的新闻-->
+    <select id="getallslideshow" resultType="Noticeinfo">
+        select *
+        from noticeinfo
+        where isslideshow=1
+    </select>
+
+</mapper>

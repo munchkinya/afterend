@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.afterend.mapper.MajorInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.project.afterend.beans.MajorInfo" >
+    <id column="maj_id" property="majId" jdbcType="INTEGER" />
+    <result column="maj_name" property="majName" jdbcType="VARCHAR" />
+    <result column="co_id" property="coId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    maj_id, maj_name, co_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from majorinfo
+    where maj_id = #{majId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from majorinfo
+    where maj_id = #{majId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.project.afterend.beans.MajorInfo" >
+    insert into majorinfo (maj_id, maj_name, co_id
+      )
+    values (#{majId,jdbcType=INTEGER}, #{majName,jdbcType=VARCHAR}, #{coId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.project.afterend.beans.MajorInfo" >
+    insert into majorinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="majId != null" >
+        maj_id,
+      </if>
+      <if test="majName != null" >
+        maj_name,
+      </if>
+      <if test="coId != null" >
+        co_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="majId != null" >
+        #{majId,jdbcType=INTEGER},
+      </if>
+      <if test="majName != null" >
+        #{majName,jdbcType=VARCHAR},
+      </if>
+      <if test="coId != null" >
+        #{coId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.afterend.beans.MajorInfo" >
+    update majorinfo
+    <set >
+      <if test="majName != null" >
+        maj_name = #{majName,jdbcType=VARCHAR},
+      </if>
+      <if test="coId != null" >
+        co_id = #{coId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where maj_id = #{majId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.project.afterend.beans.MajorInfo" >
+    update majorinfo
+    set maj_name = #{majName,jdbcType=VARCHAR},
+      co_id = #{coId,jdbcType=INTEGER}
+    where maj_id = #{majId,jdbcType=INTEGER}
+  </update>
+
+  <!--根据学院查方向-->
+  <select id="selectByCollegeId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select *
+    from majorinfo
+    where co_id = #{coid,jdbcType=INTEGER}
+  </select>
+</mapper>

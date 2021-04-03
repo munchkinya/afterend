@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.afterend.mapper.DirectionClassMapper" >
+  <resultMap id="BaseResultMap" type="com.project.afterend.beans.DirectionClass" >
+    <id column="dclass_id" property="dclassId" jdbcType="INTEGER" />
+    <result column="dclass_name" property="dclassName" jdbcType="VARCHAR" />
+    <result column="grade" property="grade" jdbcType="INTEGER" />
+    <result column="class_count" property="classCount" jdbcType="INTEGER" />
+    <result column="di_id" property="diId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    dclass_id, dclass_name, grade, class_count, di_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from directionclass
+    where dclass_id = #{dclassId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from directionclass
+    where dclass_id = #{dclassId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.project.afterend.beans.DirectionClass" >
+    insert into directionclass (dclass_id, dclass_name, grade, 
+      class_count, di_id)
+    values (#{dclassId,jdbcType=INTEGER}, #{dclassName,jdbcType=VARCHAR}, #{grade,jdbcType=INTEGER}, 
+      #{classCount,jdbcType=INTEGER}, #{diId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.project.afterend.beans.DirectionClass" >
+    insert into directionclass
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dclassId != null" >
+        dclass_id,
+      </if>
+      <if test="dclassName != null" >
+        dclass_name,
+      </if>
+      <if test="grade != null" >
+        grade,
+      </if>
+      <if test="classCount != null" >
+        class_count,
+      </if>
+      <if test="diId != null" >
+        di_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dclassId != null" >
+        #{dclassId,jdbcType=INTEGER},
+      </if>
+      <if test="dclassName != null" >
+        #{dclassName,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null" >
+        #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="classCount != null" >
+        #{classCount,jdbcType=INTEGER},
+      </if>
+      <if test="diId != null" >
+        #{diId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.afterend.beans.DirectionClass" >
+    update directionclass
+    <set >
+      <if test="dclassName != null" >
+        dclass_name = #{dclassName,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null" >
+        grade = #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="classCount != null" >
+        class_count = #{classCount,jdbcType=INTEGER},
+      </if>
+      <if test="diId != null" >
+        di_id = #{diId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where dclass_id = #{dclassId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.project.afterend.beans.DirectionClass" >
+    update directionclass
+    set dclass_name = #{dclassName,jdbcType=VARCHAR},
+      grade = #{grade,jdbcType=INTEGER},
+      class_count = #{classCount,jdbcType=INTEGER},
+      di_id = #{diId,jdbcType=INTEGER}
+    where dclass_id = #{dclassId,jdbcType=INTEGER}
+  </update>
+
+  <!--根据方向信息查班级-->
+  <select id="selectByInfo" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select *
+    from directionclass
+    where di_id = #{diid,jdbcType=INTEGER}
+  </select>
+</mapper>

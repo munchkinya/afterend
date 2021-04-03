@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.afterend.mapper.DirectionInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.project.afterend.beans.DirectionInfo" >
+    <id column="di_id" property="diId" jdbcType="INTEGER" />
+    <result column="di_name" property="diName" jdbcType="VARCHAR" />
+    <result column="train_id" property="trainId" jdbcType="INTEGER" />
+    <result column="co_id" property="coId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    di_id, di_name, train_id, co_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from directioninfo
+    where di_id = #{diId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from directioninfo
+    where di_id = #{diId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.project.afterend.beans.DirectionInfo" >
+    insert into directioninfo (di_id, di_name, train_id, 
+      co_id)
+    values (#{diId,jdbcType=INTEGER}, #{diName,jdbcType=VARCHAR}, #{trainId,jdbcType=INTEGER}, 
+      #{coId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.project.afterend.beans.DirectionInfo" >
+    insert into directioninfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="diId != null" >
+        di_id,
+      </if>
+      <if test="diName != null" >
+        di_name,
+      </if>
+      <if test="trainId != null" >
+        train_id,
+      </if>
+      <if test="coId != null" >
+        co_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="diId != null" >
+        #{diId,jdbcType=INTEGER},
+      </if>
+      <if test="diName != null" >
+        #{diName,jdbcType=VARCHAR},
+      </if>
+      <if test="trainId != null" >
+        #{trainId,jdbcType=INTEGER},
+      </if>
+      <if test="coId != null" >
+        #{coId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.afterend.beans.DirectionInfo" >
+    update directioninfo
+    <set >
+      <if test="diName != null" >
+        di_name = #{diName,jdbcType=VARCHAR},
+      </if>
+      <if test="trainId != null" >
+        train_id = #{trainId,jdbcType=INTEGER},
+      </if>
+      <if test="coId != null" >
+        co_id = #{coId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where di_id = #{diId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.project.afterend.beans.DirectionInfo" >
+    update directioninfo
+    set di_name = #{diName,jdbcType=VARCHAR},
+      train_id = #{trainId,jdbcType=INTEGER},
+      co_id = #{coId,jdbcType=INTEGER}
+    where di_id = #{diId,jdbcType=INTEGER}
+  </update>
+
+  <!--根据实训公司查方向,这里diidbudengyu4，是为了刨除管理人员-->
+  <select id="selectByInfo" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select *
+    from directioninfo
+    where train_id = #{trainid,jdbcType=INTEGER} and di_id!=4
+  </select>
+</mapper>

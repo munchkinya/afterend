@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.afterend.mapper.CollegeInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.project.afterend.beans.CollegeInfo" >
+    <id column="co_id" property="coId" jdbcType="INTEGER" />
+    <result column="co_name" property="coName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    co_id, co_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from collegeinfo
+    where co_id = #{coId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from collegeinfo
+    where co_id = #{coId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.project.afterend.beans.CollegeInfo" >
+    insert into collegeinfo (co_id, co_name)
+    values (#{coId,jdbcType=INTEGER}, #{coName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.project.afterend.beans.CollegeInfo" >
+    insert into collegeinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="coId != null" >
+        co_id,
+      </if>
+      <if test="coName != null" >
+        co_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="coId != null" >
+        #{coId,jdbcType=INTEGER},
+      </if>
+      <if test="coName != null" >
+        #{coName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.afterend.beans.CollegeInfo" >
+    update collegeinfo
+    <set >
+      <if test="coName != null" >
+        co_name = #{coName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where co_id = #{coId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.project.afterend.beans.CollegeInfo" >
+    update collegeinfo
+    set co_name = #{coName,jdbcType=VARCHAR}
+    where co_id = #{coId,jdbcType=INTEGER}
+  </update>
+  <!--得到所有学院信息-->
+  <select id="getAllCollage" resultMap="BaseResultMap">
+    select * from collegeinfo
+  </select>
+
+  <!--根据学生学号查询学生所在学院-->
+  <select id="selectCollageByStuNum" parameterType="string" resultMap="BaseResultMap">
+    SELECT distinct collegeinfo.*
+    FROM studentinfo,roleinfo,administrativeclass,majorinfo,collegeinfo
+    WHERE studentinfo.ad_id=administrativeclass.ad_id
+    and administrativeclass.maj_id=majorinfo.maj_id
+    and majorinfo.co_id=collegeinfo.co_id
+    and studentinfo.stu_number=#{stu_number}
+  </select>
+
+  <!--根据实训教师账号查询所在学院-->
+  <select id="selectCollageByTrainNum" parameterType="string" resultMap="BaseResultMap">
+    SELECT DISTINCT collegeinfo.*
+    FROM trainingteacher,trainingcompany,collegeinfo
+    WHERE trainingteacher.train_id=trainingcompany.train_id
+    and trainingcompany.collage_id=collegeinfo.co_id
+    and trainingteacher.tteach_number=#{tteach_number}
+  </select>
+  <!--根据学校教师账号查询所在学院-->
+  <select id="selectCollageByStachNum" parameterType="string" resultMap="BaseResultMap">
+    SELECT collegeinfo.*
+    FROM schoolteacher,collegeinfo
+    WHERE schoolteacher.co_id=collegeinfo.co_id and steach_number=#{steach_number}
+  </select>
+</mapper>

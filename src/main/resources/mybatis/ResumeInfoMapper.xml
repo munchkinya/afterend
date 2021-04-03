@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.afterend.mapper.ResumeInfoMapper" >
+    <resultMap id="BaseResultMap" type="com.project.afterend.beans.ResumeInfo" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="stu_id" property="stu_id" jdbcType="INTEGER" />
+        <result column="intercom_id" property="intercom_id" jdbcType="INTEGER" />
+        <result column="filename" property="filename" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="updatetime" property="updatetime" jdbcType="VARCHAR" />
+        <result column="inter_id" property="inter_id" jdbcType="INTEGER" />
+        <result column="inter_name" property="inter_name" jdbcType="VARCHAR" />
+        <result column="stu_number" property="stu_number" jdbcType="VARCHAR" />
+        <result column="stu_name" property="stu_name" jdbcType="VARCHAR" />
+    </resultMap>
+    <!--根据学生id获得这个学生所有的简历,多表查询-->
+    <select id="getAllResumeByStuid" resultType="ResumeInfo" parameterType="int">
+        select ResumeInfo.*,inter_id,inter_name from ResumeInfo,internshipcompany where stu_id=#{stu_id} and internshipcompany.inter_id=ResumeInfo.intercom_id
+    </select>
+
+    <!--记录学生上传简历操作-->
+    <insert id="insertResume" parameterType="ResumeInfo">
+        insert into ResumeInfo (stu_id,intercom_id,filename,path,status,updatetime)
+        values(#{stu_id} ,#{intercom_id},#{filename},#{path},'commit',#{updatetime})
+    </insert>
+
+    <!--根据简历名称筛选同名称简历-->
+    <select id="getResumeByName" resultType="ResumeInfo" parameterType="string">
+        select * from ResumeInfo where filename=#{filename}
+    </select>
+
+    <!--根据实习公司id获得这个公司所得到的所有简历,多表查询-->
+    <select id="getAllResumeByInterid" resultType="ResumeInfo" parameterType="int">
+        select ResumeInfo.*,studentinfo.stu_number,studentinfo.stu_name from ResumeInfo,studentinfo
+        where intercom_id=#{intercom_id} and studentinfo.stu_id=ResumeInfo.stu_id
+    </select>
+
+    <!--根据简历id修改简历状态-->
+    <update id="changeResumeStatus" parameterType="ResumeInfo">
+        update ResumeInfo
+        set status=#{status}
+        where id = #{id}
+    </update>
+
+    <!--根据id查询简历-->
+    <select id="selectById" parameterType="int" resultType="ResumeInfo">
+        select * from ResumeInfo where id=#{id}
+    </select>
+
+    <!--表联合查询，根据学生id列表进行简历查询，根据学生姓名模糊查询-->
+    <select id="getResumeByST" resultMap="BaseResultMap" parameterType="map">
+        select ResumeInfo.*,inter_id,inter_name,stu_name,stu_number
+        from ResumeInfo,internshipcompany,studentinfo
+        where internshipcompany.inter_id=ResumeInfo.intercom_id and studentinfo.stu_id=resumeinfo.stu_id and
+        stu_name LIKE CONCAT('%',#{query},'%') and resumeinfo.stu_id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

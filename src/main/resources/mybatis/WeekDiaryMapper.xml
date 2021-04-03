@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.afterend.mapper.WeekDiaryMapper" >
+    <resultMap id="BaseResultMap" type="com.project.afterend.beans.WeekDiary" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="student_id" property="student_id" jdbcType="INTEGER" />
+        <result column="week" property="week" jdbcType="VARCHAR" />
+        <result column="path" property="path" jdbcType="VARCHAR" />
+        <result column="filename" property="filename" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="stu_name" property="stu_name" jdbcType="VARCHAR" />
+        <result column="stu_number" property="stu_number" jdbcType="VARCHAR" />
+    </resultMap>
+    <!--查询整表，根据学生学号，得到信息-->
+    <select id="getAllWeekDiaryByID" resultType="WeekDiary" parameterType="int">
+        select * from weekdiary where student_id=#{student_id}
+    </select>
+
+    <!--学生上传了某一周的周报-->
+    <update id="updateByID" parameterType="WeekDiary">
+        update weekdiary set path=#{path}, filename=#{filename}, status=1 where id=#{id}
+    </update>
+
+    <!--两表联合查询，得到当前老师所带学生的全部周记情况--><!--普通教师情况-->
+    <select id="getStudentWeekFormal" parameterType="string" resultType="WeekDiary">
+
+    </select>
+
+    <!--两表联合查询，得到当前老师所带学生的全部周记情况--><!--学院领导情况情况-->
+
+    <!--两表联合查询，根据学生姓名模糊查询，根据周数分类查询，根据学生id(不是列表)全部查询-->
+    <select id="getAllWeekDiary" resultMap="BaseResultMap" parameterType="map">
+        select weekdiary.*,s.stu_name,s.stu_number from weekdiary,studentinfo s where student_id=stu_id
+        and stu_name LIKE CONCAT('%',#{studentName},'%') and week LIKE CONCAT('%',#{query},'%') and student_id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!--根据主键查某一个周记-->
+    <select id="selectByKey" parameterType="int" resultType="WeekDiary">
+        select * from weekdiary where id=#{id}
+    </select>
+
+</mapper>
