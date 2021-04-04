@@ -185,12 +185,9 @@ public class StudentController {
                          @Valid @RequestParam("stuEmail") String stuEmail,
                          @Valid @RequestParam("stuTel") String stuTel,
                          @Valid @RequestParam("grade") Integer grade,
-                         @Valid @RequestParam("selectedOptions1") String selectedOptions1,
-                         @Valid @RequestParam("selectedOptions2") String selectedOptions2,
-                         @Valid @RequestParam("selectedOptions3") String selectedOptions3) {
-        String options1[]=selectedOptions1.split(",");
-        String options2[]=selectedOptions2.split(",");
-        String options3[]=selectedOptions3.split(",");
+                         @Valid @RequestParam("selectedOptions1") Integer selectedOptions1 [],
+                         @Valid @RequestParam("selectedOptions2") Integer selectedOptions2 [],
+                         @Valid @RequestParam("selectedOptions3") Integer selectedOptions3 []) {
         if(studentInfoService.selectByStudentName(stuNumber)!=null){
             return "again";//用户名重复校验问题
         }
@@ -202,10 +199,12 @@ public class StudentController {
         studentInfo.setStuEmail(stuEmail);
         studentInfo.setStuTel(stuTel);
         studentInfo.setGrade(grade);
-        studentInfo.setAdId(Integer.parseInt(options1[2]));//专业班级id
-        studentInfo.setDclassId(Integer.parseInt(options2[3]));//方向班级id
-        studentInfo.setSteachid(Integer.parseInt(options2[4]));//企业教师id
-        studentInfo.setTteachid(Integer.parseInt(options3[1]));//校内指导教师id
+        studentInfo.setAdId(selectedOptions1[2]);//专业班级id
+        studentInfo.setDclassId(selectedOptions2[3]);//方向班级id
+
+        List<TrainingTeacher> trainingTeacher = trainingTeacherService.selectBydclssid(selectedOptions2[3]);
+        studentInfo.setTteachid(trainingTeacher.get(0).getTteachId());//企业教师id
+        studentInfo.setSteachid(selectedOptions3[1]);//校内指导教师id
         if(studentInfoService.insert(studentInfo)!=0){
             return "success";//返回成功的标志
         }

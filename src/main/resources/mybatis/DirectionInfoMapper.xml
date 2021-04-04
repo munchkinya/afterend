@@ -84,6 +84,6 @@
   <select id="selectByInfo" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select *
     from directioninfo
-    where train_id = #{trainid,jdbcType=INTEGER} and di_id!=4
+    where train_id = #{trainid,jdbcType=INTEGER} and di_id!=1
   </select>
 </mapper>

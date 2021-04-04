@@ -52,4 +52,15 @@ public class DirectionInfo {
     public void setCoId(Integer coId) {
         this.coId = coId;
     }
+
+    @Override
+    public String toString() {
+        return "DirectionInfo{" +
+                "diId=" + diId +
+                ", diName='" + diName + '\'' +
+                ", trainId=" + trainId +
+                ", coId=" + coId +
+                ", children=" + children +
+                '}';
+    }
 }
