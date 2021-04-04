@@ -74,9 +74,9 @@ public class SchoolTeacherController {
        schoolTeacher.setSteachTel(steachTel);
        schoolTeacher.setCoId(Integer.parseInt(coname));
         if("学院普通教师".equals(roleid)){
-            schoolTeacher.setRoleid(3);
-        }else{
             schoolTeacher.setRoleid(4);
+        }else{
+            schoolTeacher.setRoleid(3);
         }
         if(schoolTeacherService.insert(schoolTeacher)!=0){
             return "success";//返回成功的标志
