@@ -41,7 +41,10 @@ public class InternshipInfo {
     private Integer count;//为了画图
     /*0：正常1；提交了审核2.审核结束*/
     private Integer action;
-    private String intershipscore;
+    private String intershipscoreone;
+    private String intershipscoretwo;
+    private String finalintershipscore;
+
 
     public String getVueStatus() {
         return vueStatus;
@@ -70,13 +73,7 @@ public class InternshipInfo {
         this.count = count;
     }
 
-    public String getIntershipscore() {
-        return intershipscore;
-    }
 
-    public void setIntershipscore(String intershipscore) {
-        this.intershipscore = intershipscore;
-    }
 
     public String getSignall() {
         return signall;
@@ -294,6 +291,30 @@ public class InternshipInfo {
         this.adname = adname;
     }
 
+    public String getIntershipscoreone() {
+        return intershipscoreone;
+    }
+
+    public void setIntershipscoreone(String intershipscoreone) {
+        this.intershipscoreone = intershipscoreone;
+    }
+
+    public String getIntershipscoretwo() {
+        return intershipscoretwo;
+    }
+
+    public void setIntershipscoretwo(String intershipscoretwo) {
+        this.intershipscoretwo = intershipscoretwo;
+    }
+
+    public String getFinalintershipscore() {
+        return finalintershipscore;
+    }
+
+    public void setFinalintershipscore(String finalintershipscore) {
+        this.finalintershipscore = finalintershipscore;
+    }
+
     @Override
     public String toString() {
         return "InternshipInfo{" +
@@ -318,7 +339,9 @@ public class InternshipInfo {
                 ", signall='" + signall + '\'' +
                 ", count=" + count +
                 ", action=" + action +
-                ", intershipscore='" + intershipscore + '\'' +
+                ", intershipscoreone='" + intershipscoreone + '\'' +
+                ", intershipscoretwo='" + intershipscoretwo + '\'' +
+                ", finalintershipscore='" + finalintershipscore + '\'' +
                 ", stunumber='" + stunumber + '\'' +
                 ", stuname='" + stuname + '\'' +
                 ", intername='" + intername + '\'' +

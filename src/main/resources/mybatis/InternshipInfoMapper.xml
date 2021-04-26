@@ -30,7 +30,9 @@
     <result column="text" property="text" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="signall" property="signall" jdbcType="VARCHAR" />
-    <result column="intershipscore" property="intershipscore" jdbcType="VARCHAR" />
+    <result column="intershipscoreone" property="intershipscoreone" jdbcType="VARCHAR" />
+    <result column="intershipscoretwo" property="intershipscoretwo" jdbcType="VARCHAR" />
+    <result column="finalintershipscore" property="finalintershipscore" jdbcType="VARCHAR" />
     <result column="count" property="count" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -248,7 +250,14 @@
   <!--老师给学生打实习成绩-->
   <update id="givescore" parameterType="map">
     UPDATE internshipinfo
-    set intershipscore=#{intershipscore}
+    set intershipscoreone=#{intershipscoreone}
+    WHERE in_id=#{inid}
+  </update>
+
+  <!--企业负责人给学生打实习成绩-->
+  <update id="givescorebyinc" parameterType="map">
+    UPDATE internshipinfo
+    set intershipscoretwo=#{intershipscoretwo}
     WHERE in_id=#{inid}
   </update>
 
@@ -257,6 +266,13 @@
     SELECT *
     FROM internshipinfo
     WHERE stu_id=#{stuId}
+  </select>
+
+  <!--根据实习公司得到学生实习信息-->
+  <select id="selectstudentIntershipscorebyinc" parameterType="int" resultMap="BaseResultMap">
+    SELECT *
+    FROM internshipinfo
+    WHERE inter_id=#{interId}
   </select>
 
   <!--学生实习薪资统计********************-->

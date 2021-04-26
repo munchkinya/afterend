@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.project.afterend.beans.*;
 import com.project.afterend.service.*;
 import com.project.afterend.util.FileUtil;
+import com.project.afterend.util.ZipUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.slf4j.*;
 
@@ -165,5 +165,24 @@ public class WeekDiaryController {
         }
         return "fail";
     }
-
+    //打包下载实习周记
+    @PostMapping("/downloadalldiary")
+    public String downloadFilePackage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String id = request.getHeader("teacherId");
+        SchoolTeacher schoolTeacher = schoolTeacherService.selectBysteachNumber(id);
+        List<StudentInfo> studentInfoList = studentInfoService.selectBySTNumber(schoolTeacher.getSteachId());
+        List<String> weekDiarypathList = new ArrayList<>();
+        for(int i=0;i<studentInfoList.size();i++){
+            List<WeekDiary> list = weekDiaryService.getAllWeekDiaryByIDS(studentInfoList.get(i).getStuId());
+            System.out.println(list.size());
+            for(int j=0;j<list.size();j++){
+                System.out.println(list.get(i).toString());
+                String filepath="static/studentWeekdiarys/"+list.get(j).getFilename();
+                System.out.println(filepath);
+                weekDiarypathList.add(filepath);
+            }
+        }
+        ZipUtil.downloadZipFiles(response,weekDiarypathList,"打包.zip");
+        return "sucess";
+    }
 }

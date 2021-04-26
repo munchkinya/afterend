@@ -12,5 +12,6 @@ public interface WeekDiaryMapper {
     List<WeekDiary> getAllWeekDiaryByID(Integer student_id);
     int updateByID(WeekDiary weekDiary);
     ArrayList<WeekDiary> getAllWeekDiary(Map<String, Object> map);
+    List<WeekDiary> getAllWeekDiaryByIDS(Integer student_id);
     WeekDiary selectByKey(Integer id);
 }

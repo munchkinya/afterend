@@ -228,12 +228,40 @@ public class InternshipInfoController {
         return "sucess";
     }
 
+    /*实习负责人给学生打实习成绩*/
+    @GetMapping(value = "/getallstudentintershipinfobyinc")
+    public PageInfo<InternshipInfo> getallstudentintershipinfoby(@Valid @RequestParam("pageNum") Integer pageNum,
+                                                         @Valid @RequestParam("pageSize") Integer pageSize,
+                                                         @Valid @RequestParam("query") String query,
+                                                         @Valid @RequestParam("incID") String incID) {
+        List<Integer> idlist = new ArrayList<>();
+        InternshipCompany internshipCompany = internshipCompanyService.selectByUserName(incID);
+        List<InternshipInfo> internshipInfoList =internshipInfoService.selectstudentIntershipscorebyinc(internshipCompany.getInterId());
+        for(InternshipInfo internshipInfo:internshipInfoList){
+            idlist.add(internshipInfo.getStuId());
+        }
+        PageHelper.startPage(pageNum, pageSize);
+        Map<String, Object> parameterMap=new HashMap<String, Object>();
+        ArrayList<InternshipInfo> list = new ArrayList<>();
+        if(idlist.size()==0){
+            InternshipInfo internshipInfo=new InternshipInfo();
+            internshipInfo.setInId(0);
+            list.add(internshipInfo);
+        }else {
+            parameterMap.put("query", query);
+            parameterMap.put("list", idlist);
+            list= internshipInfoService.selectallIntership(parameterMap);
+        }
+        PageInfo<InternshipInfo> page = new PageInfo(list);
+        return page;
+    }
+
     /*老师给学生打实习成绩*/
     @GetMapping(value = "/getallstudentintershipinfo")
     public PageInfo<InternshipInfo> getallstudentintershipinfo(@Valid @RequestParam("pageNum") Integer pageNum,
-                                                         @Valid @RequestParam("pageSize") Integer pageSize,
-                                                         @Valid @RequestParam("query") String query,
-                                                         @Valid @RequestParam("stID") String stID) {
+                                                               @Valid @RequestParam("pageSize") Integer pageSize,
+                                                               @Valid @RequestParam("query") String query,
+                                                               @Valid @RequestParam("stID") String stID) {
         List<Integer> idlist = new ArrayList<>();
         SchoolTeacher schoolTeacher = schoolTeacherService.selectBysteachNumber(stID);
         List<StudentInfo> studentlist=studentInfoService.selectBySTNumber(schoolTeacher.getSteachId());//得到学生列表
@@ -261,8 +289,18 @@ public class InternshipInfoController {
     public String givestudentscore(@Valid @RequestParam("inid") Integer inid,@Valid @RequestParam("score") String score) {
         Map<String, Object> parameterMap=new HashMap<String, Object>();
         parameterMap.put("inid", inid);
-        parameterMap.put("intershipscore", score);
+        parameterMap.put("intershipscoreone", score);
         internshipInfoService.givescore(parameterMap);
+        return "success";
+    }
+
+    //企业负责人给学生打了成绩
+    @GetMapping(value = "/givestudentscorebyinc")
+    public String givestudentscorebyinc(@Valid @RequestParam("inid") Integer inid,@Valid @RequestParam("score") String score) {
+        Map<String, Object> parameterMap=new HashMap<String, Object>();
+        parameterMap.put("inid", inid);
+        parameterMap.put("intershipscoretwo", score);
+        internshipInfoService.givescorebyinc(parameterMap);
         return "success";
     }
 

@@ -15,6 +15,10 @@
     <select id="getAllWeekDiaryByID" resultType="WeekDiary" parameterType="int">
         select * from weekdiary where student_id=#{student_id}
     </select>
+    <!--查询整表，根据学生学号，得到已交实习周记信息-->
+    <select id="getAllWeekDiaryByIDS" resultType="WeekDiary" parameterType="int">
+        select * from weekdiary where student_id=#{student_id} and status = 1
+    </select>
 
     <!--学生上传了某一周的周报-->
     <update id="updateByID" parameterType="WeekDiary">

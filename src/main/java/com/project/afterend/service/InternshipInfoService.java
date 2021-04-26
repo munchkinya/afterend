@@ -85,6 +85,10 @@ public class InternshipInfoService {
         return internshipInfoMapper.givescore(map);
     }
 
+    public Integer givescorebyinc(Map<String, Object> map) {
+        return internshipInfoMapper.givescorebyinc(map);
+    }
+
     public InternshipInfo selectoneIntershipscore(Integer stuId) {
         return internshipInfoMapper.selectoneIntershipscore(stuId);
 
@@ -97,5 +101,8 @@ public class InternshipInfoService {
     }
     public ArrayList<InternshipInfo> selectStudentRankListByGrade(String grade){
         return internshipInfoMapper.selectStudentRankListByGrade(grade);
+    }
+    public ArrayList<InternshipInfo> selectstudentIntershipscorebyinc(Integer interId){
+        return internshipInfoMapper.selectstudentIntershipscorebyinc(interId);
     }
 }

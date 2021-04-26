@@ -50,6 +50,8 @@ public interface InternshipInfoMapper {
 
     Integer givescore(Map<String, Object> map);
 
+    Integer givescorebyinc(Map<String, Object> map);
+
     InternshipInfo selectoneIntershipscore(Integer stuId);
 
     ArrayList<InternshipInfo> selectSalaryByCollageId(Integer co_id);
@@ -57,4 +59,6 @@ public interface InternshipInfoMapper {
     ArrayList<InternshipInfo> selectLocationByCollageId(Integer co_id);
 
     ArrayList<InternshipInfo> selectStudentRankListByGrade(String grade);
+
+    ArrayList<InternshipInfo> selectstudentIntershipscorebyinc(Integer interId);
 }

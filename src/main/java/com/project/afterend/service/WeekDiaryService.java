@@ -16,6 +16,9 @@ public class WeekDiaryService {
     public List<WeekDiary> getAllWeekDiaryByID(Integer student_id){
         return weekDiaryMapper.getAllWeekDiaryByID(student_id);
     }
+    public List<WeekDiary> getAllWeekDiaryByIDS(Integer student_id){
+        return weekDiaryMapper.getAllWeekDiaryByIDS(student_id);
+    }
     public int updateByID(WeekDiary weekDiary){
         return weekDiaryMapper.updateByID(weekDiary);
     }
