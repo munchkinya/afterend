@@ -44,6 +44,8 @@ public interface InternshipInfoMapper {
 
     Integer acceptchange(Map<String, Object> map);
 
+    Integer givefeedback(Map<String, Object> map);
+
     Integer getstudentchangeinfobysignal(Map<String, Object> map);
 
     ArrayList<InternshipInfo> selectallIntership(Map<String, Object> map);
@@ -61,4 +63,6 @@ public interface InternshipInfoMapper {
     ArrayList<InternshipInfo> selectStudentRankListByGrade(String grade);
 
     ArrayList<InternshipInfo> selectstudentIntershipscorebyinc(Integer interId);
+
+    ArrayList<InternshipInfo> selectAllbycom(Map<String, Object> map);
 }

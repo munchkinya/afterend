@@ -44,6 +44,7 @@ public class InternshipInfo {
     private String intershipscoreone;
     private String intershipscoretwo;
     private String finalintershipscore;
+    private String feedback;
 
 
     public String getVueStatus() {
@@ -73,7 +74,13 @@ public class InternshipInfo {
         this.count = count;
     }
 
+    public String getFeedback() {
+        return feedback;
+    }
 
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
 
     public String getSignall() {
         return signall;
@@ -342,6 +349,7 @@ public class InternshipInfo {
                 ", intershipscoreone='" + intershipscoreone + '\'' +
                 ", intershipscoretwo='" + intershipscoretwo + '\'' +
                 ", finalintershipscore='" + finalintershipscore + '\'' +
+                ", feedback='" + feedback + '\'' +
                 ", stunumber='" + stunumber + '\'' +
                 ", stuname='" + stuname + '\'' +
                 ", intername='" + intername + '\'' +

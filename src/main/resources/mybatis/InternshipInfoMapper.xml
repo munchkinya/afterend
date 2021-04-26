@@ -33,6 +33,7 @@
     <result column="intershipscoreone" property="intershipscoreone" jdbcType="VARCHAR" />
     <result column="intershipscoretwo" property="intershipscoretwo" jdbcType="VARCHAR" />
     <result column="finalintershipscore" property="finalintershipscore" jdbcType="VARCHAR" />
+    <result column="feedback" property="feedback" jdbcType="VARCHAR" />
     <result column="count" property="count" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -247,6 +248,18 @@
     </foreach>
   </select>
 
+  <!--看学生反馈-->
+  <select id="selectAllbycom" resultMap="BaseResultMap" parameterType="map">
+    SELECT i.*,s.stu_number,s.stu_name,ic.inter_name,ic.address
+    FROM internshipinfo i,studentinfo s, internshipcompany ic
+    WHERE i.stu_id=s.stu_id and i.inter_id=ic.inter_id  and
+    inter_id=#{query} and i.stu_id in
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    and
+  </select>
+
   <!--老师给学生打实习成绩-->
   <update id="givescore" parameterType="map">
     UPDATE internshipinfo
@@ -274,6 +287,14 @@
     FROM internshipinfo
     WHERE inter_id=#{interId}
   </select>
+
+
+  <!--前台学生提交反馈-->
+  <update id="givefeedback" parameterType="map">
+    UPDATE internshipinfo
+    set feedback = #{feedback}
+    WHERE inter_id=#{interId}
+  </update>
 
   <!--学生实习薪资统计********************-->
   <!--根绝学院id查询学生薪资范围-->

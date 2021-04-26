@@ -36,6 +36,11 @@ public class InternshipCompanyController {
         PageInfo<InternshipCompany> page = new PageInfo(list);
         return page;
     }
+    /*得到全部的实习企业*/
+    @GetMapping(value = "/getallintercomstwo")
+    public List<InternshipCompany> getAllcom() {
+        return internshipCompanyService.selectall();
+    }
     /*修改一般发送put请求*/
     /*更新状态，0代表未删除，1代表删除*/
     @PutMapping(value = "/deleintercom/{interId}/{delflag}")

@@ -105,4 +105,10 @@ public class InternshipInfoService {
     public ArrayList<InternshipInfo> selectstudentIntershipscorebyinc(Integer interId){
         return internshipInfoMapper.selectstudentIntershipscorebyinc(interId);
     }
+    public Integer givefeedback(Map<String, Object> map){
+        return internshipInfoMapper.givefeedback(map);
+    }
+    public ArrayList<InternshipInfo> selectAllbycom(Map<String, Object> map){
+        return internshipInfoMapper.selectAllbycom(map);
+    }
 }

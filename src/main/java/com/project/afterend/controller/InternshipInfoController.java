@@ -36,6 +36,33 @@ public class InternshipInfoController {
         PageInfo<InternshipInfo> page = new PageInfo(list);
         return page;
     }
+    /*老师看学生反馈*/
+    @GetMapping(value = "/getallstudentintershipinfofeedback")
+    public PageInfo<InternshipInfo> getallstudentintershipinfofeedback(@Valid @RequestParam("pageNum") Integer pageNum,
+                                                               @Valid @RequestParam("pageSize") Integer pageSize,
+                                                               @Valid @RequestParam("query") Integer query,
+                                                               @Valid @RequestParam("stID") String stID) {
+        List<Integer> idlist = new ArrayList<>();
+        SchoolTeacher schoolTeacher = schoolTeacherService.selectBysteachNumber(stID);
+        List<StudentInfo> studentlist=studentInfoService.selectBySTNumber(schoolTeacher.getSteachId());//得到学生列表
+        for(StudentInfo studentInfo:studentlist){
+            idlist.add(studentInfo.getStuId());
+        }
+        PageHelper.startPage(pageNum, pageSize);
+        Map<String, Object> parameterMap=new HashMap<String, Object>();
+        ArrayList<InternshipInfo> list = new ArrayList<>();
+        if(idlist.size()==0){
+            InternshipInfo internshipInfo=new InternshipInfo();
+            internshipInfo.setInId(0);
+            list.add(internshipInfo);
+        }else {
+            parameterMap.put("query", query);
+            parameterMap.put("list", idlist);
+            list= internshipInfoService.selectAllbycom(parameterMap);
+        }
+        PageInfo<InternshipInfo> page = new PageInfo(list);
+        return page;
+    }
     /*修改一般发送put请求*/
     /*更新状态，0代表未删除，1代表删除*/
     @PutMapping(value = "/deleinterinfo/{inId}/{delflag}")
@@ -336,5 +363,15 @@ public class InternshipInfoController {
         PageHelper.startPage(pageNum, pageSize);
         PageInfo<InternshipInfo> page1 = new PageInfo(list);
         return page1;
+    }
+
+    //学生实习反馈
+    @PutMapping(value = "/feedback/{inId}/{feedback}")
+    public String delete(@Param("inId") @PathVariable(value = "inId") Integer inId, @PathVariable(value = "feedback") String feedback) {
+        Map<String, Object> parameterMap=new HashMap<String, Object>();
+        parameterMap.put("feedback", feedback);
+        parameterMap.put("interId", inId);
+        internshipInfoService.givefeedback(parameterMap);
+        return "sucess";
     }
 }
